@@ -32,6 +32,15 @@ L.PageComposer = L.Class.extend({
       rows: 1,
       cols: 2
     },
+      
+    //flags defined to keep track of '+' /'-' clicked
+    flags: {
+    minus_col:0,
+    minus_row:0,
+    plus_row:0,
+    plus_col:0
+    },
+
 
     initialize: function(options) {
       L.Util.setOptions(this, options);
@@ -240,7 +249,7 @@ L.PageComposer = L.Class.extend({
 
       if (this.options.keepAspectRatio) {
         //var maxHeight = (height >= width ? size.y : size.y * (1/ratio) ) - 30;
-        height += (this._scaleProps.curY - event.originalEvent.pageY) * 2 * this._scaleProps.y;
+        height += (this._scaleProps.curY - event.originalEvent.pageY) * 2* this._scaleProps.y;
         height = Math.max(this.options.minHeight, height);
         height = Math.min(this._scaleProps.maxHeight, height);
         width = height * this._scaleProps.ratio;
@@ -375,36 +384,49 @@ L.PageComposer = L.Class.extend({
     _onAddRow: function(evt) {
       evt.stopPropagation();
       this.refs.rows++;
-      this._updatePages();
+      this.refs.plus_row=1;
+      this._updatePagesModifier();
+
     },
 
     _onSubtractRow: function(evt) {
       evt.stopPropagation();
       if (this.refs.rows === 1) return;
       this.refs.rows--;
-      this._updatePages();
+      this.refs.minus_row=1;
+      this._updatePagesModifier();
     },
 
     _onAddCol: function(evt) {
       evt.stopPropagation();
       this.refs.cols++;
-      this._updatePages();
+      this.refs.plus_col=1;
+      this._updatePagesModifier();
     },
 
     _onSubtractCol: function(evt) {
       evt.stopPropagation();
       if (this.refs.cols === 1) return;
       this.refs.cols--;
-      this._updatePages();
+      this.refs.minus_col=1;
+      this._updatePagesModifier();
     },
+
 
     _updatePages: function() {
       this._setDimensions();
       this._updateToolDimensions();
       this._createPages();
-
       this.fire("change");
     },
+     
+    _updatePagesModifier: function() {
+      this._setDimensions();
+      this._updateToolDimensionsModifier(); 
+      this._createPages();     
+      this.fire("change");
+    },
+
 
     _getPos: function(ctx) {
       return this.map.latLngToContainerPoint(this.nwLocation);
@@ -425,6 +447,32 @@ L.PageComposer = L.Class.extend({
       this.nwLocation = this.map.containerPointToLatLng(this.nwPosition);
       this.bounds = this.getBounds();
     },
+
+
+
+    _updateToolDimensionsModifier: function() {
+     if (this.refs.minus_col){     
+     this.dimensions.width=this.dimensions.width-(this.dimensions.width/(this.refs.cols+1));    
+     this.refs.minus_col=0; 
+     }
+     else if (this.refs.minus_row){
+     this.dimensions.height=this.dimensions.height-(this.dimensions.height/(this.refs.rows+1));
+     this.refs.minus_row=0; 
+     }
+     else if (this.refs.plus_row){
+     this.dimensions.height=this.dimensions.height+(this.dimensions.height/(this.refs.rows-1));
+     this.refs.plus_row=0; 
+     }
+     else if (this.refs.plus_col){
+     this.dimensions.width=this.dimensions.width+(this.dimensions.width/(this.refs.cols-1));         
+     this.refs.plus_col=0; 
+     }
+      // re-calc bounds
+      this.bounds = this._getBoundsPinToNorthWest();
+     this._render();
+    },
+
+
 
     _updateToolDimensions: function() {
       var scale = this.refs.paper_aspect_ratios[this.refs.paperSize].scale;
@@ -459,7 +507,6 @@ L.PageComposer = L.Class.extend({
       var bottomLeft = new L.Point();
 
       var nwPoint = this.map.latLngToContainerPoint(this.nwLocation);
-
       topRight.y = nwPoint.y;
       bottomLeft.y = nwPoint.y + this.dimensions.height;
       bottomLeft.x = nwPoint.x;
