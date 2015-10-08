@@ -41,7 +41,6 @@ L.PageComposer = L.Class.extend({
     plus_col:0
     },
 
-
     initialize: function(options) {
       L.Util.setOptions(this, options);
       this.refs.page_aspect_ratio = this.refs.paper_aspect_ratios[this.refs.paperSize][this.refs.pageOrientation];
@@ -249,7 +248,7 @@ L.PageComposer = L.Class.extend({
 
       if (this.options.keepAspectRatio) {
         //var maxHeight = (height >= width ? size.y : size.y * (1/ratio) ) - 30;
-        height += (this._scaleProps.curY - event.originalEvent.pageY) * 2* this._scaleProps.y;
+        height += (this._scaleProps.curY - event.originalEvent.pageY) * 2 * this._scaleProps.y;
         height = Math.max(this.options.minHeight, height);
         height = Math.min(this._scaleProps.maxHeight, height);
         width = height * this._scaleProps.ratio;
@@ -386,7 +385,6 @@ L.PageComposer = L.Class.extend({
       this.refs.rows++;
       this.refs.plus_row=1;
       this._updatePagesModifier();
-
     },
 
     _onSubtractRow: function(evt) {
@@ -412,7 +410,6 @@ L.PageComposer = L.Class.extend({
       this._updatePagesModifier();
     },
 
-
     _updatePages: function() {
       this._setDimensions();
       this._updateToolDimensions();
@@ -426,12 +423,11 @@ L.PageComposer = L.Class.extend({
       this._createPages();     
       this.fire("change");
     },
-
-
+    
     _getPos: function(ctx) {
       return this.map.latLngToContainerPoint(this.nwLocation);
     },
-
+    
     _setPos: function(pos, delta){
       this._updateNWPosition(pos);
       this._render();
@@ -447,9 +443,7 @@ L.PageComposer = L.Class.extend({
       this.nwLocation = this.map.containerPointToLatLng(this.nwPosition);
       this.bounds = this.getBounds();
     },
-
-
-
+    
     _updateToolDimensionsModifier: function() {
      if (this.refs.minus_col){     
      this.dimensions.width=this.dimensions.width-(this.dimensions.width/(this.refs.cols+1));    
@@ -471,9 +465,7 @@ L.PageComposer = L.Class.extend({
       this.bounds = this._getBoundsPinToNorthWest();
      this._render();
     },
-
-
-
+    
     _updateToolDimensions: function() {
       var scale = this.refs.paper_aspect_ratios[this.refs.paperSize].scale;
       if (this.refs.pageOrientation === 'portrait') {
