@@ -35,10 +35,10 @@ L.PageComposer = L.Class.extend({
       
     //flags defined to keep track of '+' /'-' clicked
     flags: {
-    minus_col:0,
-    minus_row:0,
-    plus_row:0,
-    plus_col:0
+      minus_col:0,
+      minus_row:0,
+      plus_row:0,
+      plus_col:0
     },
 
     initialize: function(options) {
@@ -445,25 +445,22 @@ L.PageComposer = L.Class.extend({
     },
     
     _updateToolDimensionsModifier: function() {
-     if (this.refs.minus_col){     
-     this.dimensions.width=this.dimensions.width-(this.dimensions.width/(this.refs.cols+1));    
-     this.refs.minus_col=0; 
-     }
-     else if (this.refs.minus_row){
-     this.dimensions.height=this.dimensions.height-(this.dimensions.height/(this.refs.rows+1));
-     this.refs.minus_row=0; 
-     }
-     else if (this.refs.plus_row){
-     this.dimensions.height=this.dimensions.height+(this.dimensions.height/(this.refs.rows-1));
-     this.refs.plus_row=0; 
-     }
-     else if (this.refs.plus_col){
-     this.dimensions.width=this.dimensions.width+(this.dimensions.width/(this.refs.cols-1));         
-     this.refs.plus_col=0; 
+      if (this.refs.minus_col) {     
+        this.dimensions.width=this.dimensions.width-(this.dimensions.width/(this.refs.cols+1));    
+        this.refs.minus_col=0; 
+     } else if (this.refs.minus_row) {
+        this.dimensions.height=this.dimensions.height-(this.dimensions.height/(this.refs.rows+1));
+        this.refs.minus_row=0; 
+     } else if (this.refs.plus_row) {
+        this.dimensions.height=this.dimensions.height+(this.dimensions.height/(this.refs.rows-1));
+        this.refs.plus_row=0; 
+     } else if (this.refs.plus_col) {
+        this.dimensions.width=this.dimensions.width+(this.dimensions.width/(this.refs.cols-1));         
+        this.refs.plus_col=0; 
      }
       // re-calc bounds
       this.bounds = this._getBoundsPinToNorthWest();
-     this._render();
+      this._render();
     },
     
     _updateToolDimensions: function() {
