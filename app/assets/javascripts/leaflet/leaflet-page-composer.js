@@ -135,8 +135,8 @@ L.PageComposer = L.Class.extend({
 
     _onMapReset: function() {
       this.refs.zoomScale = 1 / this.map.getZoomScale(this.refs.startZoom);
-      this._render();
-      this.fire("change");
+      this._updateNWPosition(this.dimensions.nw);
+      //this.fire("change");
     },
 
     _limitChangeFire: function(){},
