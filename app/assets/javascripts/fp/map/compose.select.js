@@ -58,8 +58,8 @@
         title: 'Reset',
         klass: 'zoom-reset',
         onClick: function(){
-          var bds = pageComposer.getPinnedBounds();
-          map.fitBounds(bds, {animate: false});
+          //var bds = pageComposer.getPinnedBounds();
+          //map.fitBounds(bds, {animate: false});
 
         },
         onDisabled: function(btn, className) {
